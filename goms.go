@@ -1,11 +1,11 @@
-package gomystorage
+package goms
 
 import (
 	"github.com/LigeronAhill/goms/handlers/country"
 )
 
 type ApiClient struct {
-	countryHandler *country.Handler
+	CountryHandler *country.Handler
 }
 
 // New creates a new ApiClient instance with the provided token.

@@ -3,17 +3,18 @@ package country
 import (
 	"context"
 	"encoding/json"
-	"github.com/LigeronAhill/goms/models"
 	"io"
 	"log/slog"
 	"net/http"
 	"net/url"
+
+	"github.com/LigeronAhill/goms/models"
 )
 
 type Handler struct {
+	client *http.Client
 	token  string
 	url    string
-	client *http.Client
 }
 
 func NewHandler(token string) *Handler {
@@ -52,6 +53,7 @@ func (h *Handler) ListAll(ctx context.Context) ([]*models.Country, error) {
 	}
 	return res.Rows, nil
 }
+
 func (h *Handler) Search(ctx context.Context, searchString string) ([]*models.Country, error) {
 	uri, err := url.Parse(h.url)
 	if err != nil {
@@ -60,7 +62,6 @@ func (h *Handler) Search(ctx context.Context, searchString string) ([]*models.Co
 	v := url.Values{}
 	v.Add("search", searchString)
 	uri.RawQuery = v.Encode()
-	slog.Error("Search URI", slog.String("uri", uri.String()))
 	request, err := http.NewRequestWithContext(ctx, "GET", uri.String(), nil)
 	if err != nil {
 		slog.Error("request err", slog.String("err", err.Error()))
@@ -94,6 +95,6 @@ func (h *Handler) Search(ctx context.Context, searchString string) ([]*models.Co
 }
 
 type Response struct {
-	Meta models.Meta       `json:"meta"`
 	Rows []*models.Country `json:"rows"`
+	Meta models.Meta       `json:"meta"`
 }

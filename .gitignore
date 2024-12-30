@@ -27,3 +27,6 @@ go.work.sum
 # rest
 rest
 .idea
+
+# tasks
+Taskfile.yml
